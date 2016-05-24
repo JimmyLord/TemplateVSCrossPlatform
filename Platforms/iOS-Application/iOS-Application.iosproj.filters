@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="iOS">
+      <UniqueIdentifier>{a9dd2c4d-9936-4a13-b25a-2863c5fac391}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="iOS\Images.xcassets">
+      <UniqueIdentifier>{14486bcb-c819-4763-b07f-8d890e2566ae}</UniqueIdentifier>
+      <Extensions>iOS\Images.xcassets\*</Extensions>
+    </Filter>
+    <Filter Include="iOS\Images.xcassets\AppIcon.appiconset">
+      <UniqueIdentifier>{c9b5cb67-087d-411f-b552-634ffd3f33f2}</UniqueIdentifier>
+      <Extensions>iOS\Images.xcassets\AppIcon.appiconset\*</Extensions>
+    </Filter>
+    <Filter Include="iOS\Supporting Files">
+      <UniqueIdentifier>{2b892a59-5451-4d32-bcaf-216e9e028697}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="iOS\AppDelegate.mm">
+      <Filter>iOS</Filter>
+    </ClCompile>
+    <ClCompile Include="iOS\GameViewController.mm">
+      <Filter>iOS</Filter>
+    </ClCompile>
+    <ClCompile Include="iOS\main.mm">
+      <Filter>iOS\Supporting Files</Filter>
+    </ClCompile>
+    <ClInclude Include="iOS\AppDelegate.h">
+      <Filter>iOS</Filter>
+    </ClInclude>
+    <ClInclude Include="iOS\GameViewController.h">
+      <Filter>iOS</Filter>
+    </ClInclude>
+    <Content Include="iOS\Base.lproj\Main.storyboard">
+      <Filter>iOS</Filter>
+    </Content>
+    <Content Include="iOS\Images.xcassets\AppIcon.appiconset\Contents.json">
+      <Filter>iOS\Images.xcassets\AppIcon.appiconset</Filter>
+    </Content>
+    <InfoPlist Include="iOS\Info.plist">
+      <Filter>iOS\Supporting Files</Filter>
+    </InfoPlist>
+  </ItemGroup>
+</Project>

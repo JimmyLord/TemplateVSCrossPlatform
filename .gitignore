@@ -1,0 +1,11 @@
+
+.vs
+*.db
+*.user
+Generated Files
+
+# output files that visual studio isn't placing in the output or intermediate folders.
+Platforms/Android-Application/ARM
+Platforms/Android-Application/ARM64
+Platforms/Android-Application/x64
+Platforms/Android-Application/x86
