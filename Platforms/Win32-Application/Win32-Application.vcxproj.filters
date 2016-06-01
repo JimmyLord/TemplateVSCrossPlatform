@@ -23,6 +23,9 @@
     <ClInclude Include="Source\GL\GLExtensions.h">
       <Filter>Source\GL</Filter>
     </ClInclude>
+    <ClInclude Include="Source\UtilityWin32.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\WinMain.cpp">
@@ -33,6 +36,9 @@
     </ClCompile>
     <ClCompile Include="Source\GL\GLExtensions.cpp">
       <Filter>Source\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UtilityWin32.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

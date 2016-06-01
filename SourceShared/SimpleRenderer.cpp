@@ -3,90 +3,92 @@
 //
 #include "pch.h"
 
+#include "Utility/ShaderProgram.h"
+
 #include "SimpleRenderer.h"
-#include "MathHelper.h"
+#include "Utility/MathHelper.h"
 
-// These are used by the shader compilation methods.
-#include <vector>
-#include <iostream>
-#include <fstream>
-#include <stdexcept>
+//// These are used by the shader compilation methods.
+//#include <vector>
+//#include <iostream>
+//#include <fstream>
+//#include <stdexcept>
 
-GLuint CompileShader(GLenum type, const std::string &source)
-{
-    GLuint shader = glCreateShader(type);
-
-    const char *sourceArray[1] = { source.c_str() };
-    glShaderSource(shader, 1, sourceArray, NULL);
-    glCompileShader(shader);
-
-    GLint compileResult;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &compileResult);
-
-    if (compileResult == 0)
-    {
-        GLint infoLogLength;
-        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
-
-        std::vector<GLchar> infoLog(infoLogLength);
-        glGetShaderInfoLog(shader, (GLsizei)infoLog.size(), NULL, infoLog.data());
-
-        std::string errorMessage = std::string("Shader compilation failed: ");
-        errorMessage += std::string(infoLog.begin(), infoLog.end()); 
-
-        throw std::runtime_error(errorMessage.c_str());
-    }
-
-    return shader;
-}
-
-GLuint CompileProgram(const std::string &vsSource, const std::string &fsSource)
-{
-    GLuint program = glCreateProgram();
-
-    if (program == 0)
-    {
-        throw std::runtime_error("Program creation failed");
-    }
-
-    GLuint vs = CompileShader(GL_VERTEX_SHADER, vsSource);
-    GLuint fs = CompileShader(GL_FRAGMENT_SHADER, fsSource);
-
-    if (vs == 0 || fs == 0)
-    {
-        glDeleteShader(fs);
-        glDeleteShader(vs);
-        glDeleteProgram(program);
-        return 0;
-    }
-
-    glAttachShader(program, vs);
-    glDeleteShader(vs);
-
-    glAttachShader(program, fs);
-    glDeleteShader(fs);
-
-    glLinkProgram(program);
-
-    GLint linkStatus;
-    glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
-
-    if (linkStatus == 0)
-    {
-        GLint infoLogLength;
-        glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
-
-        std::vector<GLchar> infoLog(infoLogLength);
-        glGetProgramInfoLog(program, (GLsizei)infoLog.size(), NULL, infoLog.data());
-
-        std::string errorMessage = std::string("Program link failed: ");
-        errorMessage += std::string(infoLog.begin(), infoLog.end()); 
-
-        throw std::runtime_error(errorMessage.c_str());
-    }
-
-    return program;
-}
+//GLuint CompileShader(GLenum type, const std::string &source)
+//{
+//    GLuint shader = glCreateShader(type);
+//
+//    const char *sourceArray[1] = { source.c_str() };
+//    glShaderSource(shader, 1, sourceArray, NULL);
+//    glCompileShader(shader);
+//
+//    GLint compileResult;
+//    glGetShaderiv(shader, GL_COMPILE_STATUS, &compileResult);
+//
+//    if (compileResult == 0)
+//    {
+//        GLint infoLogLength;
+//        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
+//
+//        std::vector<GLchar> infoLog(infoLogLength);
+//        glGetShaderInfoLog(shader, (GLsizei)infoLog.size(), NULL, infoLog.data());
+//
+//        std::string errorMessage = std::string("Shader compilation failed: ");
+//        errorMessage += std::string(infoLog.begin(), infoLog.end()); 
+//
+//        throw std::runtime_error(errorMessage.c_str());
+//    }
+//
+//    return shader;
+//}
+//
+//GLuint CompileProgram(const std::string &vsSource, const std::string &fsSource)
+//{
+//    GLuint program = glCreateProgram();
+//
+//    if (program == 0)
+//    {
+//        throw std::runtime_error("Program creation failed");
+//    }
+//
+//    GLuint vs = CompileShader(GL_VERTEX_SHADER, vsSource);
+//    GLuint fs = CompileShader(GL_FRAGMENT_SHADER, fsSource);
+//
+//    if (vs == 0 || fs == 0)
+//    {
+//        glDeleteShader(fs);
+//        glDeleteShader(vs);
+//        glDeleteProgram(program);
+//        return 0;
+//    }
+//
+//    glAttachShader(program, vs);
+//    glDeleteShader(vs);
+//
+//    glAttachShader(program, fs);
+//    glDeleteShader(fs);
+//
+//    glLinkProgram(program);
+//
+//    GLint linkStatus;
+//    glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+//
+//    if (linkStatus == 0)
+//    {
+//        GLint infoLogLength;
+//        glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
+//
+//        std::vector<GLchar> infoLog(infoLogLength);
+//        glGetProgramInfoLog(program, (GLsizei)infoLog.size(), NULL, infoLog.data());
+//
+//        std::string errorMessage = std::string("Program link failed: ");
+//        errorMessage += std::string(infoLog.begin(), infoLog.end()); 
+//
+//        throw std::runtime_error(errorMessage.c_str());
+//    }
+//
+//    return program;
+//}
 
 SimpleRenderer::SimpleRenderer() :
     mWindowWidth(0),
@@ -94,32 +96,35 @@ SimpleRenderer::SimpleRenderer() :
     mDrawCount(0)
 {
     // Vertex Shader source
-    const std::string vs = R"(
-        uniform mat4 uModelMatrix;
-        uniform mat4 uViewMatrix;
-        uniform mat4 uProjMatrix;
-        attribute vec4 aPosition;
-        attribute vec4 aColor;
-        varying vec4 vColor;
-        void main()
-        {
-            gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * aPosition;
-            vColor = aColor;
-        }
-    )";
+    //const std::string vs = R"(
+    //    uniform mat4 uModelMatrix;
+    //    uniform mat4 uViewMatrix;
+    //    uniform mat4 uProjMatrix;
+    //    attribute vec4 aPosition;
+    //    attribute vec4 aColor;
+    //    varying vec4 vColor;
+    //    void main()
+    //    {
+    //        gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * aPosition;
+    //        vColor = aColor;
+    //    }
+    //)";
 
-    // Fragment Shader source
-    const std::string fs = R"(
-        precision mediump float;
-        varying vec4 vColor;
-        void main()
-        {
-            gl_FragColor = vColor;
-        }
-    )";
+    //// Fragment Shader source
+    //const std::string fs = R"(
+    //    precision mediump float;
+    //    varying vec4 vColor;
+    //    void main()
+    //    {
+    //        gl_FragColor = vColor;
+    //    }
+    //)";
 
     // Set up the shader and its uniform/attribute locations.
-    mProgram = CompileProgram(vs, fs);
+    //mProgram = CompileProgram(vs, fs);
+    m_pShaderProgram = new ShaderProgram( "Data/Shaders/white.vert", "Data/Shaders/white.frag" );
+    mProgram = m_pShaderProgram->GetProgram();
+
     mPositionAttribLocation = glGetAttribLocation(mProgram, "aPosition");
     mColorAttribLocation = glGetAttribLocation(mProgram, "aColor");
     mModelUniformLocation = glGetUniformLocation(mProgram, "uModelMatrix");

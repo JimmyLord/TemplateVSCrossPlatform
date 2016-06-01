@@ -16,6 +16,8 @@
 
 #include <EGL/egl.h>
 #include <GLES/gl.h>
+#include "GLES2/gl2.h"
+#include "GLES2/gl2ext.h"
 
 #include <android/sensor.h>
 
@@ -24,3 +26,5 @@
 #include <memory>
 
 #include "android_native_app_glue.h"
+#include "UtilityAndroid.h"
+

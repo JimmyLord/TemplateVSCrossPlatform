@@ -23,5 +23,6 @@
 
 #include <gl/GL.h>
 #include "GL/GLExtensions.h"
+#include "UtilityWin32.h"
 
 #endif //__PCH_H__

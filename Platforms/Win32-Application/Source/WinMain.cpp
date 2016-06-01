@@ -9,9 +9,10 @@
 
 #include "pch.h"
 
-#include "../SourceShared/SimpleRenderer.h"
+#include "../SourceShared/GameCore.h"
+#include "UtilityWin32.h"
 
-SimpleRenderer* g_pCubeRenderer = 0;
+GameCore* g_pGameCore = 0;
 
 #define SCREEN_WIDTH 600
 #define SCREEN_HEIGHT 600
@@ -97,9 +98,9 @@ void SetWindowSize(int width, int height)
     
     ResizeGLScene( width, height );
 
-    if( g_pCubeRenderer )
+    if( g_pGameCore )
     {
-        g_pCubeRenderer->UpdateWindowSize( width, height );
+        g_pGameCore->OnSurfaceChanged( width, height );
     }
 
 }
@@ -525,16 +526,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // Initialize OpenGL Extensions, must be done after OpenGL Context is created
     OpenGL_InitExtensions();
 
-    g_pCubeRenderer = new SimpleRenderer();
-
-    g_pCubeRenderer->UpdateWindowSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+    g_pGameCore = new GameCore();
+    g_pGameCore->Init();
+    g_pGameCore->OnSurfaceChanged( SCREEN_WIDTH, SCREEN_HEIGHT );
 
     // Create and initialize our Game object.
     //g_pGameCore->OnSurfaceCreated();
     //g_pGameCore->OnSurfaceChanged( 0, 0, width, height );
     //g_pGameCore->OneTimeInit();
 
-    //double lasttime = MyTime_GetSystemTime();
+    double lasttime = MyGetSystemTime();
 
     // Main loop
     while( !done )
@@ -553,9 +554,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
         else
         {
-            //double currtime = MyTime_GetSystemTime();
-            //double timepassed = currtime - lasttime;
-            //lasttime = currtime;
+            double currtime = MyGetSystemTime();
+            float deltatime = (float)(currtime - lasttime);
+            lasttime = currtime;
 
             if( g_WindowIsActive )
             {
@@ -565,14 +566,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 }
                 else
                 {
-                    //GenerateKeyboardEvents( g_pGameCore );
-                    //GenerateMouseEvents( g_pGameCore );
+                    g_pGameCore->Update( deltatime );
 
-                    //g_UnpausedTime += g_pGameCore->Tick( timepassed );
-                    //g_pGameCore->OnDrawFrame( 0 );
-                    //g_pGameCore->OnDrawFrameDone();
-
-                    g_pCubeRenderer->Draw();
+                    g_pGameCore->Draw();
 
                     SwapBuffers( hDeviceContext );
                 }

@@ -89,6 +89,7 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
+    <Import Project="..\..\SourceShared\SourceShared.vcxitems" Label="Shared" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -154,10 +155,17 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <CppLanguageStandard>c++11</CppLanguageStandard>
       <ExceptionHandling>Enabled</ExceptionHandling>
+      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv2;EGL;m</LibraryDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\"
+rmdir "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\Data"
+mklink /J "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\Data" "$(SolutionDir)Data"</Command>
+      <Message>Making symlink for assets</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile>
@@ -166,10 +174,17 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <CppLanguageStandard>c++11</CppLanguageStandard>
       <ExceptionHandling>Enabled</ExceptionHandling>
+      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv2;EGL;m</LibraryDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\"
+rmdir "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\Data"
+mklink /J "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\Data" "$(SolutionDir)Data"</Command>
+      <Message>Making symlink for assets</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
@@ -178,10 +193,17 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <CppLanguageStandard>c++11</CppLanguageStandard>
       <ExceptionHandling>Enabled</ExceptionHandling>
+      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv2;EGL;m</LibraryDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\"
+rmdir "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\Data"
+mklink /J "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\Data" "$(SolutionDir)Data"</Command>
+      <Message>Making symlink for assets</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
@@ -190,10 +212,17 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <CppLanguageStandard>c++11</CppLanguageStandard>
       <ExceptionHandling>Enabled</ExceptionHandling>
+      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv2;EGL;m</LibraryDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\"
+rmdir "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\Data"
+mklink /J "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\Data" "$(SolutionDir)Data"</Command>
+      <Message>Making symlink for assets</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -202,10 +231,17 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <CppLanguageStandard>c++11</CppLanguageStandard>
       <ExceptionHandling>Enabled</ExceptionHandling>
+      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv2;EGL;m</LibraryDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\"
+rmdir "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\Data"
+mklink /J "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\Data" "$(SolutionDir)Data"</Command>
+      <Message>Making symlink for assets</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -214,10 +250,17 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <CppLanguageStandard>c++11</CppLanguageStandard>
       <ExceptionHandling>Enabled</ExceptionHandling>
+      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv2;EGL;m</LibraryDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\"
+rmdir "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\Data"
+mklink /J "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\Data" "$(SolutionDir)Data"</Command>
+      <Message>Making symlink for assets</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
@@ -226,10 +269,17 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <CppLanguageStandard>c++11</CppLanguageStandard>
       <ExceptionHandling>Enabled</ExceptionHandling>
+      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv2;EGL;m</LibraryDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\"
+rmdir "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\Data"
+mklink /J "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\Data" "$(SolutionDir)Data"</Command>
+      <Message>Making symlink for assets</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile>
@@ -238,23 +288,27 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <CppLanguageStandard>c++11</CppLanguageStandard>
       <ExceptionHandling>Enabled</ExceptionHandling>
+      <AdditionalIncludeDirectories>.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <LibraryDependencies>%(LibraryDependencies);GLESv2;EGL;m</LibraryDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\"
+rmdir "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\Data"
+mklink /J "$(SolutionDir)Output\Android-Application\$(PlatformName)\$(RootNamespace)\$(Configuration)\Package\assets\Data" "$(SolutionDir)Data"</Command>
+      <Message>Making symlink for assets</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="UtilityAndroid.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="android_native_app_glue.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="UtilityAndroid.c" />
     <ClCompile Include="android_native_app_glue.c" />
     <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Android-StaticLibrary\Android-StaticLibrary.vcxproj">
-      <Project>{b1813925-3997-40e3-bcfb-20cb4b6b880f}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

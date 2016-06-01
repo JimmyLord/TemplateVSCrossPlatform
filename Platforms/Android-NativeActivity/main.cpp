@@ -15,7 +15,8 @@
 *
 */
 
-#include "../../SourceShared/SimpleRenderer.h"
+#include "../../SourceShared/GameCore.h"
+#include "UtilityAndroid.h"
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "MyTemplate.NativeActivity", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "MyTemplate.NativeActivity", __VA_ARGS__))
@@ -47,7 +48,7 @@ struct engine {
 	int32_t height;
 	struct saved_state state;
 
-	std::unique_ptr<SimpleRenderer> mCubeRenderer;
+	std::unique_ptr<GameCore> m_pGameCore;
 };
 
 /**
@@ -115,10 +116,11 @@ static int engine_init_display(struct engine* engine) {
 	engine->height = h;
 	engine->state.angle = 0;
 
-	if (!engine->mCubeRenderer)
+	if (!engine->m_pGameCore )
 	{
-		engine->mCubeRenderer.reset(new SimpleRenderer());
-		engine->mCubeRenderer->UpdateWindowSize(w, h);
+		engine->m_pGameCore.reset( new GameCore() );
+        engine->m_pGameCore->Init();
+		engine->m_pGameCore->OnSurfaceChanged( w, h );
 	}
 
 	return 0;
@@ -127,15 +129,17 @@ static int engine_init_display(struct engine* engine) {
 /**
 * Just the current frame in the display.
 */
-static void engine_draw_frame(struct engine* engine) {
-	if (engine->display == NULL) {
+static void engine_draw_frame(struct engine* engine)
+{
+	if( engine->display == 0 )
+    {
 		// No display.
 		return;
 	}
 
-	engine->mCubeRenderer->Draw();
+	engine->m_pGameCore->Draw();
 
-	eglSwapBuffers(engine->display, engine->surface);
+	eglSwapBuffers( engine->display, engine->surface );
 }
 
 /**
@@ -223,8 +227,11 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
 * android_native_app_glue.  It runs in its own thread, with its own
 * event loop for receiving input events and doing other things.
 */
-void android_main(struct android_app* state) {
-	struct engine engine;
+void android_main(struct android_app* state)
+{
+    g_pAndroidApp = state;
+    
+    struct engine engine;
 
 	memset(&engine, 0, sizeof(engine));
 	state->userData = &engine;
@@ -247,6 +254,8 @@ void android_main(struct android_app* state) {
 	engine.animating = 1;
 
 	// loop waiting for stuff to do.
+
+    double lasttime = 0;
 
 	while (1) {
 		// Read all pending events.
@@ -285,16 +294,18 @@ void android_main(struct android_app* state) {
 			}
 		}
 
-		if (engine.animating) {
-			// Done with events; draw next animation frame.
-			engine.state.angle += .01f;
-			if (engine.state.angle > 1) {
-				engine.state.angle = 0;
-			}
+		if( engine.animating )
+        {
+            // Done with events; draw next animation frame.
+            double timenow = MyGetSystemTime();
+            float deltatime = (float)(timenow - lasttime );
+            lasttime = timenow;
+
+            engine.m_pGameCore->Update( deltatime );
 
 			// Drawing is throttled to the screen update rate, so there
 			// is no need to do timing here.
-			engine_draw_frame(&engine);
+			engine_draw_frame( &engine );
 		}
 	}
 }

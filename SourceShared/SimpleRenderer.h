@@ -1,15 +1,6 @@
 #pragma once
 
-#include <string.h>
-
-#ifdef __APPLE__
-#include <unistd.h>
-#include <sys/resource.h>
-
-#include <OpenGLES/ES2/gl.h>
-#elif __ANDROID__ or _WIN32
-#include <GLES2/gl2.h>
-#endif
+class ShaderProgram;
 
 class SimpleRenderer
 {
@@ -20,6 +11,7 @@ public:
     void UpdateWindowSize(GLsizei width, GLsizei height);
 
 private:
+    ShaderProgram* m_pShaderProgram;
     GLuint mProgram;
     GLsizei mWindowWidth;
     GLsizei mWindowHeight;

@@ -2,18 +2,18 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="iOS">
-      <UniqueIdentifier>{a9dd2c4d-9936-4a13-b25a-2863c5fac391}</UniqueIdentifier>
+      <UniqueIdentifier>{9e015146-ecde-4ab9-ae15-32596f729570}</UniqueIdentifier>
     </Filter>
     <Filter Include="iOS\Images.xcassets">
-      <UniqueIdentifier>{14486bcb-c819-4763-b07f-8d890e2566ae}</UniqueIdentifier>
+      <UniqueIdentifier>{b791d08c-db8b-4037-a3df-a1f133eb2ca1}</UniqueIdentifier>
       <Extensions>iOS\Images.xcassets\*</Extensions>
     </Filter>
     <Filter Include="iOS\Images.xcassets\AppIcon.appiconset">
-      <UniqueIdentifier>{c9b5cb67-087d-411f-b552-634ffd3f33f2}</UniqueIdentifier>
+      <UniqueIdentifier>{10d3a7fa-b100-49f5-8263-b687314d493d}</UniqueIdentifier>
       <Extensions>iOS\Images.xcassets\AppIcon.appiconset\*</Extensions>
     </Filter>
     <Filter Include="iOS\Supporting Files">
-      <UniqueIdentifier>{2b892a59-5451-4d32-bcaf-216e9e028697}</UniqueIdentifier>
+      <UniqueIdentifier>{d1caf740-797f-4874-b28e-f3bd2f6c9e59}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

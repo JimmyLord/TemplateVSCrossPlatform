@@ -1,2 +1,2 @@
-OTHER_LIBTOOLFLAGS =  $(inherited)
-OTHER_LDFLAGS =  $(inherited)
+OTHER_LIBTOOLFLAGS = $(CONFIGURATION_BUILD_DIR)/libiOS-StaticLibrary.a $(inherited)
+OTHER_LDFLAGS = $(CONFIGURATION_BUILD_DIR)/libiOS-StaticLibrary.a $(inherited)
