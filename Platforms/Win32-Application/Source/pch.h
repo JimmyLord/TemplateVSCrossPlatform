@@ -16,13 +16,20 @@
 #include <windows.h>
 
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
-#include <tchar.h>
+#include <math.h>
+
+#include <map>
+#include <vector>
 
 #include <gl/GL.h>
 #include "GL/GLExtensions.h"
 #include "UtilityWin32.h"
+
+#include "WinMain.h"
+#include "../../../Shared/Source/GameHeaders.h"
 
 #endif //__PCH_H__

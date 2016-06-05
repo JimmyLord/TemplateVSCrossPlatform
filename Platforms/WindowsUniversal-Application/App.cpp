@@ -4,7 +4,7 @@
 
 #include "pch.h"
 #include "app.h"
-#include "..\..\SourceShared\SimpleRenderer.h"
+#include "..\..\Shared\SimpleRenderer.h"
 
 using namespace Windows::ApplicationModel::Core;
 using namespace Windows::ApplicationModel::Activation;

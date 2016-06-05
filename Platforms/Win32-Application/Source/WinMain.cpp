@@ -9,10 +9,10 @@
 
 #include "pch.h"
 
-#include "../SourceShared/GameCore.h"
+#include "../../../Shared/Source/Game/GameCore.h"
 #include "UtilityWin32.h"
 
-GameCore* g_pGameCore = 0;
+static GameCore* g_pGameCore = 0;
 
 #define SCREEN_WIDTH 600
 #define SCREEN_HEIGHT 600
@@ -59,7 +59,7 @@ GLvoid ResizeGLScene(GLsizei width, GLsizei height)
 
     g_WindowWidth = width;
     g_WindowHeight = height;
- 
+
     //if( g_pGameCore )
     //    g_pGameCore->OnSurfaceChanged( 0, 0, width, height );
 }
@@ -93,9 +93,9 @@ void SetWindowSize(int width, int height)
 
     int windowwidth = WindowRect.right - WindowRect.left;
     int windowheight = WindowRect.bottom - WindowRect.top;
-    
+
     SetWindowPos( hWnd, 0, 0, 0, windowwidth, windowheight, SWP_NOZORDER | SWP_NOMOVE ) ;
-    
+
     ResizeGLScene( width, height );
 
     if( g_pGameCore )
@@ -123,7 +123,7 @@ void GenerateKeyboardEvents()//GameCore* pGameCore)
                 if( g_EscapeButtonWillQuit )
                     g_CloseProgramRequested = true;
             }
-            
+
             //pGameCore->OnKeyDown( i, i );
 
             //LOGInfo( LOGTag, "Calling pGameCore->OnKeyDown( %d, %d )\n", i, i );
@@ -196,7 +196,7 @@ GLvoid KillGLWindow()
         {
             MessageBox( 0, L"Release Rendering Context Failed.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION );
         }
-        
+
         hRenderingContext = 0;
     }
 
@@ -294,17 +294,17 @@ bool CreateGLWindow(wchar_t* title, int width, int height, char colorbits, char 
     AdjustWindowRectEx( &WindowRect, dwStyle, false, dwExStyle );   // Adjust Window To True Requested Size
 
     if( !( hWnd = CreateWindowEx( dwExStyle,                            // Extended Style For The Window
-                                  L"OpenGL",                            // Class Name
-                                  title,                                // Window Title
-                                  WS_CLIPSIBLINGS | WS_CLIPCHILDREN |   // Required Window Style
-                                    dwStyle,                            // Selected Window Style
-                                  0, 0,                                 // Window Position
-                                  WindowRect.right-WindowRect.left,     // Calculate Adjusted Window Width
-                                  WindowRect.bottom-WindowRect.top,     // Calculate Adjusted Window Height
-                                  0,                                    // No Parent Window
-                                  0,                                    // No Menu
-                                  hInstance,                            // Instance
-                                  0)))                                  // Don't Pass Anything To WM_CREATE
+        L"OpenGL",                            // Class Name
+        title,                                // Window Title
+        WS_CLIPSIBLINGS | WS_CLIPCHILDREN |   // Required Window Style
+        dwStyle,                            // Selected Window Style
+        0, 0,                                 // Window Position
+        WindowRect.right-WindowRect.left,     // Calculate Adjusted Window Width
+        WindowRect.bottom-WindowRect.top,     // Calculate Adjusted Window Height
+        0,                                    // No Parent Window
+        0,                                    // No Menu
+        hInstance,                            // Instance
+        0)))                                  // Don't Pass Anything To WM_CREATE
     {
         KillGLWindow();
         MessageBox( 0, L"Window Creation Error.", L"ERROR", MB_OK|MB_ICONEXCLAMATION );
@@ -316,8 +316,8 @@ bool CreateGLWindow(wchar_t* title, int width, int height, char colorbits, char 
         sizeof(PIXELFORMATDESCRIPTOR),  // Size Of This Pixel Format Descriptor
         1,                              // Version Number
         PFD_DRAW_TO_WINDOW |            // Format Must Support Window
-          PFD_SUPPORT_OPENGL |          // Format Must Support OpenGL
-          PFD_DOUBLEBUFFER,             // Must Support Double Buffering
+        PFD_SUPPORT_OPENGL |          // Format Must Support OpenGL
+        PFD_DOUBLEBUFFER,             // Must Support Double Buffering
         PFD_TYPE_RGBA,                  // Request An RGBA Format
         (BYTE)colorbits,                // Select Our Color Depth
         0, 0, 0, 0, 0, 0,               // Color Bits Ignored
@@ -380,97 +380,97 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch( uMsg )
     {
-        case WM_ACTIVATE:
+    case WM_ACTIVATE:
+    {
+        if( !HIWORD(wParam) )
         {
-            if( !HIWORD(wParam) )
-            {
-                g_WindowIsActive = true;
-            }
-            else
-            {
-                g_WindowIsActive = false;
-            } 
+            g_WindowIsActive = true;
+        }
+        else
+        {
+            g_WindowIsActive = false;
+        } 
+        return 0;
+    }
+
+    case WM_SYSCOMMAND:
+    {
+        switch( wParam )
+        {
+            // don't let screensaver or monitor power save mode kick in.
+        case SC_SCREENSAVE:
+        case SC_MONITORPOWER:
             return 0;
         }
+        break;
+    }
 
-        case WM_SYSCOMMAND:
-        {
-            switch( wParam )
-            {
-                // don't let screensaver or monitor power save mode kick in.
-                case SC_SCREENSAVE:
-                case SC_MONITORPOWER:
-                    return 0;
-            }
-            break;
-        }
+    case WM_CLOSE:
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
 
-        case WM_CLOSE:
-        {
-            PostQuitMessage(0);
-            return 0;
-        }
+    //case WM_CHAR:
+    //{
+    ////    if( lParam & 1<<30 == 0 )
+    ////    {
+    ////        g_KeyStates[wParam] = true;
+    ////    }
+    ////    else
+    ////    {
+    ////        g_KeyStates[wParam] = false;
+    ////    }
+    //    return 0;
+    //}
 
-        //case WM_CHAR:
-        //{
-        ////    if( lParam & 1<<30 == 0 )
-        ////    {
-        ////        g_KeyStates[wParam] = true;
-        ////    }
-        ////    else
-        ////    {
-        ////        g_KeyStates[wParam] = false;
-        ////    }
-        //    return 0;
-        //}
+    case WM_KEYDOWN:
+    {
+        if( wParam == VK_OEM_COMMA )
+            g_KeyStates[','] = true;
+        else if( wParam == VK_OEM_PERIOD )
+            g_KeyStates['.'] = true;
+        else if( wParam == VK_OEM_4 )
+            g_KeyStates['['] = true;
+        else if( wParam == VK_OEM_6 )
+            g_KeyStates[']'] = true;
+        else
+            g_KeyStates[wParam] = true;
+        return 0;
+    }
 
-        case WM_KEYDOWN:
-        {
-            if( wParam == VK_OEM_COMMA )
-                g_KeyStates[','] = true;
-            else if( wParam == VK_OEM_PERIOD )
-                g_KeyStates['.'] = true;
-            else if( wParam == VK_OEM_4 )
-                g_KeyStates['['] = true;
-            else if( wParam == VK_OEM_6 )
-                g_KeyStates[']'] = true;
-            else
-                g_KeyStates[wParam] = true;
-            return 0;
-        }
+    case WM_KEYUP:
+    {
+        if( wParam == VK_OEM_COMMA )
+            g_KeyStates[','] = false;
+        else if( wParam == VK_OEM_PERIOD )
+            g_KeyStates['.'] = false;
+        else if( wParam == VK_OEM_4 )
+            g_KeyStates['['] = false;
+        else if( wParam == VK_OEM_6 )
+            g_KeyStates[']'] = false;
+        else
+            g_KeyStates[wParam] = false;
+        return 0;
+    }
 
-        case WM_KEYUP:
-        {
-            if( wParam == VK_OEM_COMMA )
-                g_KeyStates[','] = false;
-            else if( wParam == VK_OEM_PERIOD )
-                g_KeyStates['.'] = false;
-            else if( wParam == VK_OEM_4 )
-                g_KeyStates['['] = false;
-            else if( wParam == VK_OEM_6 )
-                g_KeyStates[']'] = false;
-            else
-                g_KeyStates[wParam] = false;
-            return 0;
-        }
+    case WM_LBUTTONDOWN:
+    {
+        g_MouseButtonStates[0] = true;
+        return 0;
+    }
 
-        case WM_LBUTTONDOWN:
-        {
-            g_MouseButtonStates[0] = true;
-            return 0;
-        }
+    case WM_LBUTTONUP:
+    {
+        g_MouseButtonStates[0] = false;
+        return 0;
+    }
 
-        case WM_LBUTTONUP:
-        {
-            g_MouseButtonStates[0] = false;
-            return 0;
-        }
-
-        case WM_SIZE:
-        {
-            ResizeGLScene( LOWORD(lParam), HIWORD(lParam) );
-            return 0;
-        }
+    case WM_SIZE:
+    {
+        ResizeGLScene( LOWORD(lParam), HIWORD(lParam) );
+        return 0;
+    }
     }
 
     // Pass all unhandled messages to DefWindowProc
@@ -527,8 +527,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     OpenGL_InitExtensions();
 
     g_pGameCore = new GameCore();
-    g_pGameCore->Init();
     g_pGameCore->OnSurfaceChanged( SCREEN_WIDTH, SCREEN_HEIGHT );
+    g_pGameCore->LoadContent();
 
     // Create and initialize our Game object.
     //g_pGameCore->OnSurfaceCreated();

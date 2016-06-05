@@ -1,6 +1,6 @@
 #import "GameViewController.h"
 #import <OpenGLES/ES2/glext.h>
-#import "../../../SourceShared/SimpleRenderer.h"
+#import "../../../Shared/SimpleRenderer.h"
 
 #import <memory>
 

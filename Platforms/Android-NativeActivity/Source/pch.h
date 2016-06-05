@@ -8,23 +8,31 @@
 //
 
 #include <jni.h>
-#include <errno.h>
 
-#include <string.h>
-#include <unistd.h>
-#include <sys/resource.h>
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <malloc.h>
+#include <memory.h>
+#include <math.h>
+
+#include <map>
+#include <vector>
 
 #include <EGL/egl.h>
 #include <GLES/gl.h>
 #include "GLES2/gl2.h"
 #include "GLES2/gl2ext.h"
 
+#include <errno.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/resource.h>
 #include <android/sensor.h>
-
 #include <android/log.h>
-
 #include <memory>
 
 #include "android_native_app_glue.h"
 #include "UtilityAndroid.h"
 
+#include "../Shared/Source/GameHeaders.h"

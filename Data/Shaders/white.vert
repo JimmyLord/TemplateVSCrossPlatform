@@ -1,15 +1,7 @@
 
-attribute vec4 aPosition;
-attribute vec4 aColor;
-
-uniform mat4 uModelMatrix;
-uniform mat4 uViewMatrix;
-uniform mat4 uProjMatrix;
-
-varying vec4 vColor;
+attribute vec2 a_Position;
 
 void main()
 {
-    gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * aPosition;
-    vColor = aColor;
+    gl_Position = vec4( a_Position, 0, 1 );
 }

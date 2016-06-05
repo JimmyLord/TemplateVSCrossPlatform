@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{04735107-3ecb-4bb0-986f-ab19fcf6073a}</ItemsProjectGuid>
+    <ItemsProjectName>Shared</ItemsProjectName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\Libraries\lodepng\lodepng.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Source\Core\CoreHeaders.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Source\Core\Math\MathHelpers.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Source\Core\Math\MyMatrix.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Source\Core\Math\MyQuaternion.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Source\Core\Math\Vector.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Source\Core\Utility\Helpers.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Source\Core\Utility\ShaderProgram.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Source\GameHeaders.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Source\Game\GameCore.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\Libraries\lodepng\lodepng.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Core\Math\MyMatrix.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Core\Math\MyQuaternion.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Core\Math\Vector.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Core\Utility\Helpers.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Core\Utility\ShaderProgram.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Source\Game\GameCore.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\Data\Shaders\white.frag">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\Data\Shaders\white.vert">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+</Project>
