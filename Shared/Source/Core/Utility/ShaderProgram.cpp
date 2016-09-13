@@ -73,8 +73,8 @@ GLuint ShaderProgram::CompileShader(GLenum shaderType, const char* shaderstring)
 
         char* infobuffer = new char[infolen+1];
         glGetShaderInfoLog( shaderhandle, infolen+1, 0, infobuffer );
-        //OutputDebugString( infobuffer );
-        //assert( false );
+        OutputDebugString( infobuffer );
+        assert( false );
         delete infobuffer;
 
         glDeleteShader( shaderhandle );
@@ -89,7 +89,7 @@ bool ShaderProgram::Init(const char* vertfilename, const char* fragfilename)
     m_VertShaderString = LoadCompleteFile( vertfilename, 0 );
     m_FragShaderString = LoadCompleteFile( fragfilename, 0 );
 
-    //assert( m_VertShaderString != 0 && m_FragShaderString != 0 );
+    assert( m_VertShaderString != 0 && m_FragShaderString != 0 );
     if( m_VertShaderString == 0 || m_FragShaderString == 0 )
         return false;
 
@@ -117,8 +117,8 @@ bool ShaderProgram::Init(const char* vertfilename, const char* fragfilename)
 
         char* infobuffer = new char[infolen+1];
         glGetProgramInfoLog( m_Program, infolen+1, 0, infobuffer );
-        //OutputDebugString( infobuffer );
-        //myassert( false );
+        OutputDebugString( infobuffer );
+        assert( false );
         delete infobuffer;
 
         Cleanup();

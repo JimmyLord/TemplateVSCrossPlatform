@@ -60,8 +60,8 @@ GLvoid ResizeGLScene(GLsizei width, GLsizei height)
     g_WindowWidth = width;
     g_WindowHeight = height;
 
-    //if( g_pGameCore )
-    //    g_pGameCore->OnSurfaceChanged( 0, 0, width, height );
+    if( g_pGameCore )
+        g_pGameCore->OnSurfaceChanged( width, height );
 }
 
 void SetWindowSize(int width, int height)
@@ -105,37 +105,6 @@ void SetWindowSize(int width, int height)
 
 }
 
-void GenerateKeyboardEvents()//GameCore* pGameCore)
-{
-    static unsigned int keys[256];
-    static unsigned int keysold[256];
-
-    for( int i=0; i<256; i++ )
-    {
-        keysold[i] = keys[i];
-        keys[i] = MYFW_GetKey( i );
-
-        if( keys[i] == 1 && keysold[i] == 0 )
-        {
-            // If the game is set to quit on escape, then quit.
-            if( i == VK_ESCAPE )
-            {
-                if( g_EscapeButtonWillQuit )
-                    g_CloseProgramRequested = true;
-            }
-
-            //pGameCore->OnKeyDown( i, i );
-
-            //LOGInfo( LOGTag, "Calling pGameCore->OnKeyDown( %d, %d )\n", i, i );
-        }
-
-        if( keys[i] == 0 && keysold[i] == 1 )
-        {
-            //pGameCore->OnKeyUp( i, i );
-        }
-    }
-}
-
 void GetMouseCoordinates(int* mx, int* my)
 {
     extern HWND hWnd;
@@ -151,32 +120,6 @@ void GetMouseCoordinates(int* mx, int* my)
     }
 }
 
-void GenerateMouseEvents() //GameCore* pGameCore)
-{
-    static unsigned int buttons[3];
-    static unsigned int buttonsold[3];
-
-    for( int i=0; i<3; i++ )
-    {
-        buttonsold[i] = buttons[i];
-        buttons[i] = g_MouseButtonStates[i];
-    }
-
-    int px;
-    int py;
-    GetMouseCoordinates( &px, &py );
-
-    // button/finger 0
-    //if( buttons[0] == 1 && buttonsold[0] == 0 )
-    //    pGameCore->OnTouch( GCBA_Down, 0, (float)px, (float)py, 0, 0 ); // new press
-
-    //if( buttons[0] == 0 && buttonsold[0] == 1 )
-    //    pGameCore->OnTouch( GCBA_Up, 0, (float)px, (float)py, 0, 0 ); // new release
-
-    //if( buttons[0] == 1 && buttonsold[0] == 1 )
-    //    pGameCore->OnTouch( GCBA_Held, 0, (float)px, (float)py, 0, 0 ); // still pressed
-}
-
 GLvoid KillGLWindow()
 {
     if( g_FullscreenMode )
@@ -189,12 +132,12 @@ GLvoid KillGLWindow()
     {
         if( !wglMakeCurrent( 0, 0 ) )
         {
-            MessageBox( 0, L"Release Of Device Context And Rendering Context Failed.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION );
+            MessageBox( 0, "Release Of Device Context And Rendering Context Failed.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION );
         }
 
         if( !wglDeleteContext( hRenderingContext ) )
         {
-            MessageBox( 0, L"Release Rendering Context Failed.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION );
+            MessageBox( 0, "Release Rendering Context Failed.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION );
         }
 
         hRenderingContext = 0;
@@ -202,24 +145,24 @@ GLvoid KillGLWindow()
 
     if( hDeviceContext && !ReleaseDC( hWnd, hDeviceContext ) )
     {
-        MessageBox( 0, L"Release Device Context Failed.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION );
+        MessageBox( 0, "Release Device Context Failed.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION );
         hDeviceContext = 0;
     }
 
     if( hWnd && !DestroyWindow( hWnd ) )
     {
-        MessageBox( 0, L"Could Not Release hWnd.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION );
+        MessageBox( 0, "Could Not Release hWnd.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION );
         hWnd = 0;
     }
 
-    if( !UnregisterClass( L"OpenGL", hInstance ) )
+    if( !UnregisterClass( "OpenGL", hInstance ) )
     {
-        MessageBox( 0, L"Could Not Unregister Class.", L"SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION );
+        MessageBox( 0, "Could Not Unregister Class.", "SHUTDOWN ERROR", MB_OK | MB_ICONINFORMATION );
         hInstance = 0;
     }
 }
 
-bool CreateGLWindow(wchar_t* title, int width, int height, char colorbits, char zbits, char stencilbits, bool fullscreenflag)
+bool CreateGLWindow(char* title, int width, int height, char colorbits, char zbits, char stencilbits, bool fullscreenflag)
 {
     GLuint PixelFormat;
 
@@ -245,11 +188,11 @@ bool CreateGLWindow(wchar_t* title, int width, int height, char colorbits, char 
     wc.hCursor = LoadCursor( 0, IDC_ARROW );        // Load The Arrow Pointer
     wc.hbrBackground = 0;                           // No Background Required For GL
     wc.lpszMenuName = 0;                            // We Don't Want A Menu
-    wc.lpszClassName = L"OpenGL";                   // Set The Class Name
+    wc.lpszClassName = "OpenGL";                   // Set The Class Name
 
     if( !RegisterClass( &wc ) )                     // Attempt To Register The Window Class
     {
-        MessageBox( 0, L"Failed To Register The Window Class.", L"ERROR", MB_OK|MB_ICONEXCLAMATION );
+        MessageBox( 0, "Failed To Register The Window Class.", "ERROR", MB_OK|MB_ICONEXCLAMATION );
         return false;
     }
 
@@ -267,13 +210,13 @@ bool CreateGLWindow(wchar_t* title, int width, int height, char colorbits, char 
         if( ChangeDisplaySettings( &dmScreenSettings, CDS_FULLSCREEN ) != DISP_CHANGE_SUCCESSFUL )
         {
             // If The Mode Fails, Offer Two Options.  Quit Or Run In A Window.
-            if( MessageBox( 0, L"The Requested Fullscreen Mode Is Not Supported By\nYour Video Card. Use Windowed Mode Instead?", L"", MB_YESNO|MB_ICONEXCLAMATION ) == IDYES )
+            if( MessageBox( 0, "The Requested Fullscreen Mode Is Not Supported By\nYour Video Card. Use Windowed Mode Instead?", "", MB_YESNO|MB_ICONEXCLAMATION ) == IDYES )
             {
                 g_FullscreenMode = false;
             }
             else
             {
-                MessageBox( 0, L"Program Will Now Close.", L"ERROR", MB_OK|MB_ICONSTOP );
+                MessageBox( 0, "Program Will Now Close.", "ERROR", MB_OK|MB_ICONSTOP );
                 return false;
             }
         }
@@ -294,10 +237,10 @@ bool CreateGLWindow(wchar_t* title, int width, int height, char colorbits, char 
     AdjustWindowRectEx( &WindowRect, dwStyle, false, dwExStyle );   // Adjust Window To True Requested Size
 
     if( !( hWnd = CreateWindowEx( dwExStyle,                            // Extended Style For The Window
-        L"OpenGL",                            // Class Name
+        "OpenGL",                             // Class Name
         title,                                // Window Title
         WS_CLIPSIBLINGS | WS_CLIPCHILDREN |   // Required Window Style
-        dwStyle,                            // Selected Window Style
+        dwStyle,                              // Selected Window Style
         0, 0,                                 // Window Position
         WindowRect.right-WindowRect.left,     // Calculate Adjusted Window Width
         WindowRect.bottom-WindowRect.top,     // Calculate Adjusted Window Height
@@ -307,7 +250,7 @@ bool CreateGLWindow(wchar_t* title, int width, int height, char colorbits, char 
         0)))                                  // Don't Pass Anything To WM_CREATE
     {
         KillGLWindow();
-        MessageBox( 0, L"Window Creation Error.", L"ERROR", MB_OK|MB_ICONEXCLAMATION );
+        MessageBox( 0, "Window Creation Error.", "ERROR", MB_OK|MB_ICONEXCLAMATION );
         return false;
     }
 
@@ -336,35 +279,35 @@ bool CreateGLWindow(wchar_t* title, int width, int height, char colorbits, char 
     if( !( hDeviceContext = GetDC(hWnd) ) ) // Did We Get A Device Context?
     {
         KillGLWindow();
-        MessageBox( 0, L"Can't Create A GL Device Context.", L"ERROR", MB_OK|MB_ICONEXCLAMATION );
+        MessageBox( 0, "Can't Create A GL Device Context.", "ERROR", MB_OK|MB_ICONEXCLAMATION );
         return 0;
     }
 
     if( !( PixelFormat = ChoosePixelFormat(hDeviceContext, &pfd) ) ) // Did Windows Find A Matching Pixel Format?
     {
         KillGLWindow();
-        MessageBox( 0, L"Can't Find A Suitable PixelFormat.", L"ERROR", MB_OK|MB_ICONEXCLAMATION );
+        MessageBox( 0, "Can't Find A Suitable PixelFormat.", "ERROR", MB_OK|MB_ICONEXCLAMATION );
         return 0;
     }
 
     if( !SetPixelFormat( hDeviceContext, PixelFormat, &pfd) ) // Are We Able To Set The Pixel Format?
     {
         KillGLWindow();
-        MessageBox( 0, L"Can't Set The PixelFormat.", L"ERROR", MB_OK|MB_ICONEXCLAMATION );
+        MessageBox( 0, "Can't Set The PixelFormat.", "ERROR", MB_OK|MB_ICONEXCLAMATION );
         return 0;
     }
 
     if( !( hRenderingContext = wglCreateContext(hDeviceContext) ) ) // Are We Able To Get A Rendering Context?
     {
         KillGLWindow();
-        MessageBox( 0, L"Can't Create A GL Rendering Context.", L"ERROR", MB_OK|MB_ICONEXCLAMATION );
+        MessageBox( 0, "Can't Create A GL Rendering Context.", "ERROR", MB_OK|MB_ICONEXCLAMATION );
         return 0;
     }
 
     if( !wglMakeCurrent( hDeviceContext, hRenderingContext ) ) // Try To Activate The Rendering Context
     {
         KillGLWindow();
-        MessageBox( 0, L"Can't Activate The GL Rendering Context.", L"ERROR", MB_OK|MB_ICONEXCLAMATION );
+        MessageBox( 0, "Can't Activate The GL Rendering Context.", "ERROR", MB_OK|MB_ICONEXCLAMATION );
         return 0;
     }
 
@@ -381,96 +324,86 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch( uMsg )
     {
     case WM_ACTIVATE:
-    {
-        if( !HIWORD(wParam) )
         {
-            g_WindowIsActive = true;
+            if( !HIWORD(wParam) )
+            {
+                g_WindowIsActive = true;
+            }
+            else
+            {
+                g_WindowIsActive = false;
+            } 
         }
-        else
-        {
-            g_WindowIsActive = false;
-        } 
         return 0;
-    }
 
     case WM_SYSCOMMAND:
-    {
-        switch( wParam )
         {
+            switch( wParam )
+            {
             // don't let screensaver or monitor power save mode kick in.
-        case SC_SCREENSAVE:
-        case SC_MONITORPOWER:
-            return 0;
+            case SC_SCREENSAVE:
+            case SC_MONITORPOWER:
+                return 0;
+            }
         }
         break;
-    }
 
     case WM_CLOSE:
-    {
-        PostQuitMessage(0);
+        {
+            PostQuitMessage(0);
+        }
         return 0;
-    }
-
-    //case WM_CHAR:
-    //{
-    ////    if( lParam & 1<<30 == 0 )
-    ////    {
-    ////        g_KeyStates[wParam] = true;
-    ////    }
-    ////    else
-    ////    {
-    ////        g_KeyStates[wParam] = false;
-    ////    }
-    //    return 0;
-    //}
 
     case WM_KEYDOWN:
-    {
-        if( wParam == VK_OEM_COMMA )
-            g_KeyStates[','] = true;
-        else if( wParam == VK_OEM_PERIOD )
-            g_KeyStates['.'] = true;
-        else if( wParam == VK_OEM_4 )
-            g_KeyStates['['] = true;
-        else if( wParam == VK_OEM_6 )
-            g_KeyStates[']'] = true;
-        else
-            g_KeyStates[wParam] = true;
+        {
+            if( wParam == VK_ESCAPE && g_EscapeButtonWillQuit )
+                g_CloseProgramRequested = true;
+
+            if( wParam == VK_OEM_COMMA )
+                g_KeyStates[','] = true;
+            else if( wParam == VK_OEM_PERIOD )
+                g_KeyStates['.'] = true;
+            else if( wParam == VK_OEM_4 )
+                g_KeyStates['['] = true;
+            else if( wParam == VK_OEM_6 )
+                g_KeyStates[']'] = true;
+            else
+                g_KeyStates[wParam] = true;
+        }
         return 0;
-    }
 
     case WM_KEYUP:
-    {
-        if( wParam == VK_OEM_COMMA )
-            g_KeyStates[','] = false;
-        else if( wParam == VK_OEM_PERIOD )
-            g_KeyStates['.'] = false;
-        else if( wParam == VK_OEM_4 )
-            g_KeyStates['['] = false;
-        else if( wParam == VK_OEM_6 )
-            g_KeyStates[']'] = false;
-        else
-            g_KeyStates[wParam] = false;
+        {
+            if( wParam == VK_OEM_COMMA )
+                g_KeyStates[','] = false;
+            else if( wParam == VK_OEM_PERIOD )
+                g_KeyStates['.'] = false;
+            else if( wParam == VK_OEM_4 )
+                g_KeyStates['['] = false;
+            else if( wParam == VK_OEM_6 )
+                g_KeyStates[']'] = false;
+            else
+                g_KeyStates[wParam] = false;
+        }
         return 0;
-    }
 
     case WM_LBUTTONDOWN:
-    {
-        g_MouseButtonStates[0] = true;
+        {
+            g_MouseButtonStates[0] = true;
+        }
         return 0;
-    }
 
     case WM_LBUTTONUP:
-    {
-        g_MouseButtonStates[0] = false;
+        {
+            g_MouseButtonStates[0] = false;
+        }
         return 0;
-    }
 
     case WM_SIZE:
-    {
-        ResizeGLScene( LOWORD(lParam), HIWORD(lParam) );
+        {
+            ResizeGLScene( LOWORD(lParam), HIWORD(lParam) );
+        }
         return 0;
-    }
     }
 
     // Pass all unhandled messages to DefWindowProc
@@ -482,11 +415,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     int width = SCREEN_WIDTH;
     int height = SCREEN_HEIGHT;
 
-#if _DEBUG && MYFW_WINDOWS
-    OverrideJSONMallocFree();
-#endif
-
-    g_EscapeButtonWillQuit = false;
+    g_EscapeButtonWillQuit = true;
     g_CloseProgramRequested = false;
 
     g_RequestedWidth = width;
@@ -508,17 +437,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     for( int i=0; i<256; i++ )
         g_KeyStates[i] = false;
 
-    // Initialize sockets
-    //WSAData wsaData;
-    //int code = WSAStartup(MAKEWORD(1, 1), &wsaData);
-    //if( code != 0 )
-    //{
-    //    LOGError( LOGTag, "WSAStartup error:%d\n",code );
-    //    return 0;
-    //}
-
     // Create Our OpenGL Window
-    if( !CreateGLWindow( L"OpenGL Window", width, height, 32, 31, 1, false ) )
+    if( !CreateGLWindow( "OpenGL Window", width, height, 32, 31, 1, false ) )
     {
         return 0;
     }
@@ -529,11 +449,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     g_pGameCore = new GameCore();
     g_pGameCore->OnSurfaceChanged( SCREEN_WIDTH, SCREEN_HEIGHT );
     g_pGameCore->LoadContent();
-
-    // Create and initialize our Game object.
-    //g_pGameCore->OnSurfaceCreated();
-    //g_pGameCore->OnSurfaceChanged( 0, 0, width, height );
-    //g_pGameCore->OneTimeInit();
 
     double lasttime = MyGetSystemTime();
 
@@ -576,12 +491,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
     }
 
-    //delete( g_pGameCore );
-    //g_pGameCore = 0;
+    delete( g_pGameCore );
+    g_pGameCore = 0;
 
     KillGLWindow();
-
-    //WSACleanup();
 
     return msg.wParam;
 }
