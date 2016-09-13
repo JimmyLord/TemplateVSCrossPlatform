@@ -1,6 +1,9 @@
 del /F /Q /S /AH ipch\*
 rmdir /Q /S ipch
 
+del /F /Q /S /AH packages\*
+rmdir /Q /S packages
+
 del /F /Q /S /AH Output\*
 rmdir /Q /S Output
 

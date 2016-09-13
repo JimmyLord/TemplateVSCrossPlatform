@@ -6,6 +6,8 @@
 ipch
 Output
 Generated Files
+packages
+*.payload.desc
 
 # output files that visual studio isn't placing in the output or intermediate folders.
 Debug
