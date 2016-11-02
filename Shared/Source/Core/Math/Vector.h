@@ -10,9 +10,6 @@
 #ifndef __Vector_H__
 #define __Vector_H__
 
-#include "../Utility/Helpers.h"
-#include "MathHelpers.h"
-
 class Vector2
 {
 public:
@@ -23,7 +20,6 @@ public:
     Vector2() {}
     Vector2(float nxy) { x = nxy; y = nxy; }
     Vector2(float nx, float ny) { x = nx; y = ny; }
-    Vector2(int nx, int ny) { x = (float)nx; y = (float)ny; }
     //virtual ~Vector2() {}
 
     inline void Set(float nx, float ny) { x = nx; y = ny; }
@@ -40,18 +36,32 @@ public:
     inline bool operator ==(const Vector2& o) const { return fequal(this->x, o.x) && fequal(this->y, o.y); }
     inline bool operator !=(const Vector2& o) const { return !fequal(this->x, o.x) || !fequal(this->y, o.y); }
 
+    inline Vector2 operator -() const { return Vector2(-this->x, -this->y); }
     inline Vector2 operator *(const float o) const { return Vector2(this->x * o, this->y * o); }
     inline Vector2 operator /(const float o) const { return Vector2(this->x / o, this->y / o); }
+    inline Vector2 operator +(const float o) const { return Vector2(this->x + o, this->y + o); }
+    inline Vector2 operator -(const float o) const { return Vector2(this->x - o, this->y - o); }
+    inline Vector2 operator *(const Vector2& o) const { return Vector2(this->x * o.x, this->y * o.y); }
+    inline Vector2 operator /(const Vector2& o) const { return Vector2(this->x / o.x, this->y / o.y); }
     inline Vector2 operator +(const Vector2& o) const { return Vector2(this->x + o.x, this->y + o.y); }
     inline Vector2 operator -(const Vector2& o) const { return Vector2(this->x - o.x, this->y - o.y); }
 
     inline Vector2 operator *=(const float o) { this->x *= o; this->y *= o; return *this; }
     inline Vector2 operator /=(const float o) { this->x /= o; this->y /= o; return *this; }
+    inline Vector2 operator +=(const float o) { this->x += o; this->y += o; return *this; }
+    inline Vector2 operator -=(const float o) { this->x -= o; this->y -= o; return *this; }
+    inline Vector2 operator *=(const Vector2& o) { this->x *= o.x; this->y *= o.y; return *this; }
+    inline Vector2 operator /=(const Vector2& o) { this->x /= o.x; this->y /= o.y; return *this; }
     inline Vector2 operator +=(const Vector2& o) { this->x += o.x; this->y += o.y; return *this; }
     inline Vector2 operator -=(const Vector2& o) { this->x -= o.x; this->y -= o.y; return *this; }
 
     float& operator[] (int i) { MyAssert(i>=0 && i<2); return *(&x + i); }
 };
+
+inline Vector2 operator *(float scalar, const Vector2& vector) { return Vector2(scalar * vector.x, scalar * vector.y); }
+inline Vector2 operator /(float scalar, const Vector2& vector) { return Vector2(scalar / vector.x, scalar / vector.y); }
+inline Vector2 operator +(float scalar, const Vector2& vector) { return Vector2(scalar + vector.x, scalar + vector.y); }
+inline Vector2 operator -(float scalar, const Vector2& vector) { return Vector2(scalar - vector.x, scalar - vector.y); }
 
 class Vector3
 {
@@ -82,14 +92,20 @@ public:
     inline Vector3 Add(const Vector3& o) const { return Vector3(this->x + o.x, this->y + o.y, this->z + o.z); }
     inline Vector3 Sub(const Vector3& o) const { return Vector3(this->x - o.x, this->y - o.y, this->z - o.z); }
     inline Vector3 Scale(const float o) const { return Vector3(this->x * o, this->y * o, this->z * o); }
+    inline Vector3 MultiplyComponents(const Vector3& o) const { return Vector3(this->x * o.x, this->y * o.y, this->z * o.z); }
+    inline Vector3 DivideComponents(const Vector3& o) const { return Vector3(this->x / o.x, this->y / o.y, this->z / o.z); }
+    //inline Vector3 MultiplyComponents(const Vector3Int& o) const { return Vector3(this->x * o.x, this->y * o.y, this->z * o.z); }
 
     inline bool operator ==(const Vector3& o) const { return fequal(this->x, o.x) && fequal(this->y, o.y) && fequal(this->z, o.z); }
     inline bool operator !=(const Vector3& o) const { return !fequal(this->x, o.x) || !fequal(this->y, o.y) || !fequal(this->z, o.z); }
 
+    inline Vector3 operator -() const { return Vector3(-this->x, -this->y, -this->z); }
     inline Vector3 operator *(const float o) const { return Vector3(this->x * o, this->y * o, this->z * o); }
     inline Vector3 operator /(const float o) const { return Vector3(this->x / o, this->y / o, this->z / o); }
     inline Vector3 operator +(const float o) const { return Vector3(this->x + o, this->y + o, this->z + o); }
     inline Vector3 operator -(const float o) const { return Vector3(this->x - o, this->y - o, this->z - o); }
+    inline Vector3 operator *(const Vector3& o) const { return Vector3(this->x * o.x, this->y * o.y, this->z * o.z); }
+    inline Vector3 operator /(const Vector3& o) const { return Vector3(this->x / o.x, this->y / o.y, this->z / o.z); }
     inline Vector3 operator +(const Vector3& o) const { return Vector3(this->x + o.x, this->y + o.y, this->z + o.z); }
     inline Vector3 operator -(const Vector3& o) const { return Vector3(this->x - o.x, this->y - o.y, this->z - o.z); }
 
@@ -97,6 +113,8 @@ public:
     inline Vector3 operator /=(const float o) { this->x /= o; this->y /= o; this->z /= o; return *this; }
     inline Vector3 operator +=(const float o) { this->x += o; this->y += o; this->z += o; return *this; }
     inline Vector3 operator -=(const float o) { this->x -= o; this->y -= o; this->z -= o; return *this; }
+    inline Vector3 operator *=(const Vector3& o) { this->x *= o.x; this->y *= o.y; this->z *= o.z; return *this; }
+    inline Vector3 operator /=(const Vector3& o) { this->x /= o.x; this->y /= o.y; this->z /= o.z; return *this; }
     inline Vector3 operator +=(const Vector3& o) { this->x += o.x; this->y += o.y; this->z += o.z; return *this; }
     inline Vector3 operator -=(const Vector3& o) { this->x -= o.x; this->y -= o.y; this->z -= o.z; return *this; }
 
@@ -104,6 +122,11 @@ public:
 
     //inline void operator =(const Vector2& o) { x = o.x; y = o.y; z = 0; } // couldn't make this work, used a constructor instead.
 };
+
+inline Vector3 operator *(float scalar, const Vector3& vector) { return Vector3(scalar * vector.x, scalar * vector.y, scalar * vector.z); }
+inline Vector3 operator /(float scalar, const Vector3& vector) { return Vector3(scalar / vector.x, scalar / vector.y, scalar / vector.z); }
+inline Vector3 operator +(float scalar, const Vector3& vector) { return Vector3(scalar + vector.x, scalar + vector.y, scalar + vector.z); }
+inline Vector3 operator -(float scalar, const Vector3& vector) { return Vector3(scalar - vector.x, scalar - vector.y, scalar - vector.z); }
 
 class Vector4
 {
@@ -147,13 +170,23 @@ public:
     //        );
     //}
 
+    inline Vector4 operator -() const { return Vector4(-this->x, -this->y, -this->z, -this->w); }
     inline Vector4 operator *(const float o) const { return Vector4(this->x * o, this->y * o, this->z * o, this->w * o); }
     inline Vector4 operator /(const float o) const { return Vector4(this->x / o, this->y / o, this->z / o, this->w / o); }
+    inline Vector4 operator +(const float o) const { return Vector4(this->x + o, this->y + o, this->z + o, this->w + o); }
+    inline Vector4 operator -(const float o) const { return Vector4(this->x - o, this->y - o, this->z - o, this->w - o); }
+    inline Vector4 operator *(const Vector4& o) const { return Vector4(this->x * o.x, this->y * o.y, this->z * o.z, this->w * o.w); }
+    inline Vector4 operator /(const Vector4& o) const { return Vector4(this->x / o.x, this->y / o.y, this->z / o.z, this->w / o.w); }
     inline Vector4 operator +(const Vector4& o) const { return Vector4(this->x + o.x, this->y + o.y, this->z + o.z, this->w + o.w); }
     inline Vector4 operator -(const Vector4& o) const { return Vector4(this->x - o.x, this->y - o.y, this->z - o.z, this->w - o.w); }
 
     float& operator[] (int i) { MyAssert(i>=0 && i<4); return *(&x + i); }
 };
+
+inline Vector4 operator *(float scalar, const Vector4& vector) { return Vector4(scalar * vector.x, scalar * vector.y, scalar * vector.z, scalar * vector.w); }
+inline Vector4 operator /(float scalar, const Vector4& vector) { return Vector4(scalar / vector.x, scalar / vector.y, scalar / vector.z, scalar / vector.w); }
+inline Vector4 operator +(float scalar, const Vector4& vector) { return Vector4(scalar + vector.x, scalar + vector.y, scalar + vector.z, scalar + vector.w); }
+inline Vector4 operator -(float scalar, const Vector4& vector) { return Vector4(scalar - vector.x, scalar - vector.y, scalar - vector.z, scalar - vector.w); }
 
 class Vector2Int
 {
@@ -174,9 +207,16 @@ public:
 
     inline bool operator ==(const Vector2Int& o) const { return this->x == o.x && this->y == o.y; }
     inline bool operator !=(const Vector2Int& o) const { return this->x != o.x || this->y != o.y; }
+
+    inline Vector2Int operator -() const { return Vector2Int(-this->x, -this->y); }
     inline Vector2Int operator +(const Vector2Int& o) const { return Vector2Int(this->x + o.x, this->y + o.y); }
     inline Vector2Int operator -(const Vector2Int& o) const { return Vector2Int(this->x - o.x, this->y - o.y); }
 };
+
+inline Vector2Int operator *(int scalar, const Vector2Int& vector) { return Vector2Int(scalar * vector.x, scalar * vector.y); }
+inline Vector2Int operator /(int scalar, const Vector2Int& vector) { return Vector2Int(scalar / vector.x, scalar / vector.y); }
+inline Vector2Int operator +(int scalar, const Vector2Int& vector) { return Vector2Int(scalar + vector.x, scalar + vector.y); }
+inline Vector2Int operator -(int scalar, const Vector2Int& vector) { return Vector2Int(scalar - vector.x, scalar - vector.y); }
 
 class Vector3Int
 {
@@ -192,17 +232,56 @@ public:
 
     inline void Set(int nx, int ny, int nz) { x = nx; y = ny; z = nz; }
     inline void Set(Vector3Int vec) { x = vec.x; y = vec.y; z = vec.z; }
-    inline float LengthSquared() const {return (float)x*x + y*y + z*z;}
-    inline float Length() const {return sqrtf((float)x*x + y*y + z*z);}
+    inline int LengthSquared() const { return x*x + y*y + z*z; }
+    inline float Length() const { return sqrtf((float)x*x + y*y + z*z); }
 
     //inline Vector3Int Normalize() const {float len = Length(); if( fequal(len,0) ) return Vector3Int(x,y,z); len = 1.0f/len; return Vector3Int(x*len, y*len, z*len);}
     //inline Vector3Int Cross(const Vector3Int& o) const {return Vector3Int( (y*o.z - z*o.y), (z*o.x - x*o.z), (x*o.y - y*o.x) );}
 
+    inline Vector3 MultiplyComponents(const Vector3& o) const { return Vector3(this->x * o.x, this->y * o.y, this->z * o.z); }
+    inline Vector3Int MultiplyComponents(const Vector3Int& o) const { return Vector3Int(this->x * o.x, this->y * o.y, this->z * o.z); }
+
     inline bool operator ==(const Vector3Int& o) const { return this->x == o.x && this->y == o.y && this->z == o.z; }
     inline bool operator !=(const Vector3Int& o) const { return this->x != o.x || this->y != o.y || this->z != o.z; }
+
+    inline Vector3Int operator -() const { return Vector3Int(-this->x, -this->y, -this->z); }
+    inline Vector3 operator *(const float o) const { return Vector3(this->x * o, this->y * o, this->z * o); }
+    inline Vector3 operator /(const float o) const { return Vector3(this->x / o, this->y / o, this->z / o); }
+    inline Vector3 operator +(const float o) const { return Vector3(this->x + o, this->y + o, this->z + o); }
+    inline Vector3 operator -(const float o) const { return Vector3(this->x - o, this->y - o, this->z - o); }
+    inline Vector3Int operator *(const int o) const { return Vector3Int(this->x * o, this->y * o, this->z * o); }
+    inline Vector3Int operator /(const int o) const { return Vector3Int(this->x / o, this->y / o, this->z / o); }
+    inline Vector3Int operator +(const int o) const { return Vector3Int(this->x + o, this->y + o, this->z + o); }
+    inline Vector3Int operator -(const int o) const { return Vector3Int(this->x - o, this->y - o, this->z - o); }
+    inline Vector3 operator *(const Vector3& o) const { return Vector3(this->x * o.x, this->y * o.y, this->z * o.z); }
+    inline Vector3 operator /(const Vector3& o) const { return Vector3(this->x / o.x, this->y / o.y, this->z / o.z); }
+    inline Vector3 operator +(const Vector3& o) const { return Vector3(this->x + o.x, this->y + o.y, this->z + o.z); }
+    inline Vector3 operator -(const Vector3& o) const { return Vector3(this->x - o.x, this->y - o.y, this->z - o.z); }
+    inline Vector3Int operator *(const Vector3Int& o) const { return Vector3Int(this->x * o.x, this->y * o.y, this->z * o.z); }
+    inline Vector3Int operator /(const Vector3Int& o) const { return Vector3Int(this->x / o.x, this->y / o.y, this->z / o.z); }
     inline Vector3Int operator +(const Vector3Int& o) const { return Vector3Int(this->x + o.x, this->y + o.y, this->z + o.z); }
     inline Vector3Int operator -(const Vector3Int& o) const { return Vector3Int(this->x - o.x, this->y - o.y, this->z - o.z); }
+
+    //inline Vector3Int operator *=(const float o) { this->x *= o; this->y *= o; this->z *= o; return *this; }
+    //inline Vector3Int operator /=(const float o) { this->x /= o; this->y /= o; this->z /= o; return *this; }
+    //inline Vector3Int operator +=(const float o) { this->x += o; this->y += o; this->z += o; return *this; }
+    //inline Vector3Int operator -=(const float o) { this->x -= o; this->y -= o; this->z -= o; return *this; }
+    //inline Vector3Int operator +=(const Vector3& o) { this->x += o.x; this->y += o.y; this->z += o.z; return *this; }
+    //inline Vector3Int operator -=(const Vector3& o) { this->x -= o.x; this->y -= o.y; this->z -= o.z; return *this; }
+    inline Vector3Int operator +=(const Vector3Int& o) { this->x += o.x; this->y += o.y; this->z += o.z; return *this; }
+    inline Vector3Int operator -=(const Vector3Int& o) { this->x -= o.x; this->y -= o.y; this->z -= o.z; return *this; }
+
+    int& operator[] (int i) { MyAssert(i>=0 && i<3); return *(&x + i); }
 };
+
+inline Vector3 operator *(float scalar, const Vector3Int& vector) { return Vector3(scalar * vector.x, scalar * vector.y, scalar * vector.z); }
+inline Vector3 operator /(float scalar, const Vector3Int& vector) { return Vector3(scalar / vector.x, scalar / vector.y, scalar / vector.z); }
+inline Vector3 operator +(float scalar, const Vector3Int& vector) { return Vector3(scalar + vector.x, scalar + vector.y, scalar + vector.z); }
+inline Vector3 operator -(float scalar, const Vector3Int& vector) { return Vector3(scalar - vector.x, scalar - vector.y, scalar - vector.z); }
+inline Vector3Int operator *(int scalar, const Vector3Int& vector) { return Vector3Int(scalar * vector.x, scalar * vector.y, scalar * vector.z); }
+inline Vector3Int operator /(int scalar, const Vector3Int& vector) { return Vector3Int(scalar / vector.x, scalar / vector.y, scalar / vector.z); }
+inline Vector3Int operator +(int scalar, const Vector3Int& vector) { return Vector3Int(scalar + vector.x, scalar + vector.y, scalar + vector.z); }
+inline Vector3Int operator -(int scalar, const Vector3Int& vector) { return Vector3Int(scalar - vector.x, scalar - vector.y, scalar - vector.z); }
 
 class Vector4Int
 {
@@ -226,9 +305,16 @@ public:
 
     inline bool operator ==(const Vector4Int& o) const { return this->x == o.x && this->y == o.y && this->z == o.z && this->w == o.w; }
     inline bool operator !=(const Vector4Int& o) const { return this->x != o.x || this->y != o.y || this->z != o.z || this->w != o.w; }
+
+    inline Vector4Int operator -() const { return Vector4Int(-this->x, -this->y, -this->z, -this->w); }
     inline Vector4Int operator +(const Vector4Int& o) const { return Vector4Int(this->x + o.x, this->y + o.y, this->z + o.z, this->w + o.w); }
     inline Vector4Int operator -(const Vector4Int& o) const { return Vector4Int(this->x - o.x, this->y - o.y, this->z - o.z, this->w - o.w); }
 };
+
+inline Vector4Int operator *(int scalar, const Vector4Int& vector) { return Vector4Int(scalar * vector.x, scalar * vector.y, scalar * vector.z, scalar * vector.w); }
+inline Vector4Int operator /(int scalar, const Vector4Int& vector) { return Vector4Int(scalar / vector.x, scalar / vector.y, scalar / vector.z, scalar / vector.w); }
+inline Vector4Int operator +(int scalar, const Vector4Int& vector) { return Vector4Int(scalar + vector.x, scalar + vector.y, scalar + vector.z, scalar + vector.w); }
+inline Vector4Int operator -(int scalar, const Vector4Int& vector) { return Vector4Int(scalar - vector.x, scalar - vector.y, scalar - vector.z, scalar - vector.w); }
 
 class MyRect
 {
@@ -266,6 +352,8 @@ public:
 
     inline bool operator ==(const Vector2T<MyType>& o) const { return this->x == o.x && this->y == o.y; }
     inline bool operator !=(const Vector2T<MyType>& o) const { return this->x != o.x || this->y != o.y; }
+
+    inline Vector2T<MyType> operator -() const { return Vector2T<MyType>(-this->x, -this->y); }
 
     inline Vector2T<MyType> operator *(const float o) const { return Vector2T<MyType>(this->x * o, this->y * o); }
     inline Vector2T<MyType> operator /(const float o) const { return Vector2T<MyType>(this->x / o, this->y / o); }
